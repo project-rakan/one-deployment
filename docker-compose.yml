@@ -2,13 +2,22 @@ version: "3.3"
 services:
 
   # RabbitMQ that connects the backend to the frontend
-  queue:
+  queue_entity:
     image: rabbitmq:3-management
+    expose:
+      # The standard AMQP protocol port
+      - 5672
     ports:
-      - "8080:15672"
-      - "5672"
-    networks:
-      - rakan
+      # HTTP management UI
+      - '15672:15672'
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      RABBITMQ_DEFAULT_USER: "guest" # doesn't matter
+      RABBITMQ_DEFAULT_PASS: "guest" # doesn't matter
     deploy:
       replicas: 1
       update_config:
@@ -19,6 +28,11 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
 
   distribution_database:
     image: postgres:latest
@@ -41,9 +55,5 @@ services:
   # Frontend
   # Bladecaller
     
-
-networks:
-  rakan:
-
 volumes:
   db-data:
