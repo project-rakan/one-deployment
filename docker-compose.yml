@@ -3,19 +3,7 @@ services:
 
   # RabbitMQ that connects the backend to the frontend
   bladecaller_queue:
-    image: rabbitmq:3-management
-    expose:
-      # The standard AMQP protocol port
-      - 5672
-    ports:
-      # HTTP management UI
-      - '15672:15672'
-    expose:
-      - 15672
-    environment:
-      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+    build: ./queue
     deploy:
       replicas: 1
       update_config:
@@ -32,8 +20,8 @@ services:
       timeout: 15s
       retries: 1
 
-  distribution_database:
-    image: postgres:latest
+  bladecaller_database:
+    build: ./distribution-database
     volumes:
       - db-data:/var/lib/postgresql/data
     deploy:
@@ -46,6 +34,11 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+
+  xayah:
+    build: ./xayah
+    ports:
+      - "80:5000"
 
   rakan_engine:
     build: ./rakan
@@ -61,8 +54,6 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
-  # Frontend
-  # Bladecaller
     
 volumes:
   db-data:
