@@ -2,48 +2,48 @@ version: "3.3"
 services:
 
   # RabbitMQ that connects the backend to the frontend
-  bladecaller_queue:
-    build: ./queue
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 120s
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
-      interval: 5s
-      timeout: 15s
-      retries: 1
+  # bladecaller_queue:
+  #   build: ./queue
+  #   ports:
+  #     - "15672:15672"
+  #     - "5672:5672"
+  #   deploy:
+  #     replicas: 1
+  #     update_config:
+  #       parallelism: 1
+  #       delay: 10s
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 10s
+  #       max_attempts: 3
+  #       window: 120s
+  #   healthcheck:
+  #     test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+  #     interval: 5s
+  #     timeout: 15s
+  #     retries: 1
 
-  bladecaller_database:
-    build: ./distribution-database
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    ports:
-      - "8000:80"
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 120s
+  # bladecaller_database:
+  #   build: ./distribution-database
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   ports:
+  #     - "8000:80"
+  #   deploy:
+  #     replicas: 1
+  #     update_config:
+  #       parallelism: 1
+  #       delay: 10s
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 10s
+  #       max_attempts: 3
+  #       window: 120s
 
-  xayah:
-    build: ./xayah
-    ports:
-      - "80:5000"
+  # xayah:
+  #   build: ./xayah
+  #   ports:
+  #     - "80:5000"
 
   rakan_engine:
     build: ./rakan
