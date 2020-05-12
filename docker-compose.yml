@@ -4,6 +4,9 @@ services:
   # RabbitMQ that connects the backend to the frontend
   bladecaller_queue:
     build: ./queue
+    ports:
+      - "15672:15672"
+      - "5672:5672"
     deploy:
       replicas: 1
       update_config:
@@ -24,6 +27,8 @@ services:
     build: ./distribution-database
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - "8000:80"
     deploy:
       replicas: 1
       update_config:
