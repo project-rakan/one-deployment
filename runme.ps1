@@ -1,3 +1,12 @@
+# Download bladecaller from git
+if (-not (Test-Path -Path bladecaller)) {
+    git clone https://github.com/project-rakan/bladecaller.git
+} else {
+    cd .\bladecaller
+    git pull origin master
+    cd ..\
+}
+
 # Download Rakan from git
 if (-not (Test-Path -Path rakan) ) {
     git clone https://github.com/project-rakan/rakan.git
@@ -16,7 +25,7 @@ if (-not (Test-Path -Path xayah) ) {
     cd ..\
 }
 
-# Download xayah from git
+# Download bladecaller part 2 from git
 if (-not (Test-Path -Path distribution-database) ) {
     git clone https://github.com/project-rakan/distribution-database.git
 } else {
@@ -25,5 +34,8 @@ if (-not (Test-Path -Path distribution-database) ) {
     cd ..\
 }
 
+# build everything
 docker-compose build
+
+# LAUNCH
 docker-compose up
