@@ -1,3 +1,6 @@
 [submodule "rakan"]
 	path = rakan
 	url = https://github.com/project-rakan/rakan.git
+[submodule "distribution-database"]
+	path = distribution-database
+	url = https://github.com/project-rakan/distribution-database.git
